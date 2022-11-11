@@ -80,7 +80,7 @@ public class OrderController {
                                             @RequestParam Date deliveryDate,
                                             @RequestParam List<Truck> truck) {
         Order scheduleOrder = orderService.getOrderById(id);
-        return ResponseEntity.ok().body(orderService.scheduleDelivery(id));
+        return ResponseEntity.ok().body(orderService.scheduleDelivery(id,deliveryDate, truck));
     }
 
     @RolesAllowed({"ROLE_MANAGER"} )

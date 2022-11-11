@@ -1,6 +1,6 @@
 package com.example.Warehouse.Management.System.service.ServiceImpl;
 
-import com.example.Warehouse.Management.System.model.PasswordResetToken;
+//import com.example.Warehouse.Management.System.model.PasswordResetToken;
 import com.example.Warehouse.Management.System.model.User;
 import com.example.Warehouse.Management.System.model.UserRole;
 import com.example.Warehouse.Management.System.model.enums.RoleEnum;
@@ -8,7 +8,7 @@ import com.example.Warehouse.Management.System.payload.request.LoginRequest;
 import com.example.Warehouse.Management.System.payload.request.SignUpRequest;
 import com.example.Warehouse.Management.System.payload.response.JwtResponse;
 import com.example.Warehouse.Management.System.payload.response.MessageResponse;
-import com.example.Warehouse.Management.System.repository.PasswordResetTokenRepository;
+//import com.example.Warehouse.Management.System.repository.PasswordResetTokenRepository;
 import com.example.Warehouse.Management.System.repository.UserRepository;
 import com.example.Warehouse.Management.System.repository.UserRoleRepository;
 import com.example.Warehouse.Management.System.security.JwtUtils;
@@ -36,8 +36,8 @@ public class AuthService {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    PasswordResetTokenRepository resetTokenRepository;
+//    @Autowired
+//    PasswordResetTokenRepository resetTokenRepository;
 
     @Autowired
     UserRoleRepository roleRepository;
@@ -88,7 +88,7 @@ public class AuthService {
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
 
-        Set<String> strRoles = signUpRequest.getRole();
+        List<String> strRoles = signUpRequest.getRole();
         Set<UserRole> roles = new HashSet<>();
 
         if (strRoles == null) {
@@ -125,9 +125,9 @@ public class AuthService {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
-    public void createPasswordResetTokenForUser(User user, String token) {
-        PasswordResetToken myToken = new PasswordResetToken(token, user);
-        resetTokenRepository.save(myToken);
-    }
+//    public void createPasswordResetTokenForUser(User user, String token) {
+//        PasswordResetToken myToken = new PasswordResetToken(token, user);
+//        resetTokenRepository.save(myToken);
+//    }
 
 }

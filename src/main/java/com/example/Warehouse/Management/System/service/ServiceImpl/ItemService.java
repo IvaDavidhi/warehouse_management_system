@@ -52,6 +52,8 @@ public class ItemService implements IItem {
         existingItem.setItemPrice(item.getItemPrice());
         existingItem.setItemQuantity(item.getItemQuantity());
 
+        itemsRepository.save(existingItem);
+
         return existingItem;
     }
 }

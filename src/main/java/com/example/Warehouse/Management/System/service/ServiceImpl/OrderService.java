@@ -2,6 +2,7 @@ package com.example.Warehouse.Management.System.service.ServiceImpl;
 
 import com.example.Warehouse.Management.System.exceptions.ResourceNotFoundException;
 import com.example.Warehouse.Management.System.model.Order;
+import com.example.Warehouse.Management.System.model.Truck;
 import com.example.Warehouse.Management.System.model.enums.OrderStatus;
 import com.example.Warehouse.Management.System.payload.dto.DeclineReasonDto;
 import com.example.Warehouse.Management.System.payload.dto.UpdateOrderDto;
@@ -18,7 +19,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -72,6 +75,7 @@ public class OrderService implements IOrder {
                 new ResourceNotFoundException("Order not found"));
         if (existingOrder.getStatus() == OrderStatus.CREATED || existingOrder.getStatus() == OrderStatus.DECLINED) {
             existingOrder.setInventoryItems(order.getInventoryItems());
+            orderRepository.save(existingOrder);
 
             return "Order updated";
         }
@@ -93,12 +97,12 @@ public class OrderService implements IOrder {
 
     }
 
-    public Order scheduleDelivery(Long id) {
+    public Order scheduleDelivery(Long id, Date deliveryDate, List<Truck> truck) {
         Order order = orderRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Order not found"));
 
-        order.setDeliveryDate(order.getDeliveryDate());
-        order.setTrucks(order.getTrucks());
+        order.setDeliveryDate(deliveryDate);
+        order.setTrucks(truck);
         order.setInventoryItems(order.getInventoryItems());
         order.setStatus(OrderStatus.UNDER_DELIVERY);
 

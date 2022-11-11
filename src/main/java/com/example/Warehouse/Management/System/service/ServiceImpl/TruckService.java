@@ -46,7 +46,7 @@ public class TruckService implements ITruck {
         Truck existingTruck = truckRepository.findById(id).orElseThrow(()->
                 new ResourceNotFoundException("Truck not found"));
         existingTruck.setLicensePlate(truck.getLicensePlate());
-
+        truckRepository.save(existingTruck);
         return existingTruck;
     }
 }
