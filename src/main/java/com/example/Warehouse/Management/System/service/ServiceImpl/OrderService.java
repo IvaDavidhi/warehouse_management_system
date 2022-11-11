@@ -15,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,7 +39,7 @@ public class OrderService implements IOrder {
     @Override
     public Order getOrderById(Long id) {
         return orderRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Order by id " + id + " was not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Order by id " + id + " was not found"));
     }
 
     @Override
@@ -53,11 +55,11 @@ public class OrderService implements IOrder {
 
     @Override
     public String deleteOrderById(Long id) {
-        Order deleteOrder = orderRepository.findById(id).orElseThrow(()->
+        Order deleteOrder = orderRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Order not found"));
-        if(deleteOrder.getStatus() == OrderStatus.DECLINED ||
-            deleteOrder.getStatus() == OrderStatus.AWAITING_APPROVAL ||
-            deleteOrder.getStatus() == OrderStatus.CREATED) {
+        if (deleteOrder.getStatus() == OrderStatus.DECLINED ||
+                deleteOrder.getStatus() == OrderStatus.AWAITING_APPROVAL ||
+                deleteOrder.getStatus() == OrderStatus.CREATED) {
             orderRepository.deleteById(id);
             return "Order deleted";
         }
@@ -66,7 +68,7 @@ public class OrderService implements IOrder {
 
     @Override
     public String updateOrderById(UpdateOrderDto order, Long id) {
-        Order existingOrder = orderRepository.findById(id).orElseThrow(()->
+        Order existingOrder = orderRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Order not found"));
         if (existingOrder.getStatus() == OrderStatus.CREATED || existingOrder.getStatus() == OrderStatus.DECLINED) {
             existingOrder.setInventoryItems(order.getInventoryItems());
@@ -86,19 +88,13 @@ public class OrderService implements IOrder {
     }
 
     public Page<Order> filterAndSortOrder(OrderStatus status, Pageable pageable) {
-       return  orderRepository
-               .findAll(PageRequest.of(0,1, Sort.by(Sort.Direction.DESC, "submittedDate")));
+        return orderRepository
+                .findAll(PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "submittedDate")));
 
-    }
-
-    public void declineWithReason(Long id, DeclineReasonDto declineReasonDto) {
-        Order existingOrder = orderRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException("Order not found"));
-        existingOrder.setDecliningReason(declineReasonDto.getId());
     }
 
     public Order scheduleDelivery(Long id) {
-        Order order = orderRepository.findById(id).orElseThrow(()->
+        Order order = orderRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Order not found"));
 
         order.setDeliveryDate(order.getDeliveryDate());
@@ -107,5 +103,22 @@ public class OrderService implements IOrder {
         order.setStatus(OrderStatus.UNDER_DELIVERY);
 
         return orderRepository.save(order);
+    }
+
+    public void submitOrder(Long id) {
+        Order submitOrder = orderRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Order not found"));
+        if (submitOrder.getStatus() == OrderStatus.CREATED || submitOrder.getStatus() == OrderStatus.DECLINED) {
+            submitOrder.setStatus(OrderStatus.AWAITING_APPROVAL);
+            orderRepository.save(submitOrder);
+        }
+        return;
+    }
+
+    public void orderFulfilled(Long id) {
+        Order orderFulfilled = orderRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Order not found"));
+        orderFulfilled.setStatus(OrderStatus.FULFILLED);
+        orderRepository.save(orderFulfilled);
     }
 }

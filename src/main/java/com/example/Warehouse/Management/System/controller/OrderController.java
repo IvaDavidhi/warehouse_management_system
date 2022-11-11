@@ -70,15 +70,8 @@ public class OrderController {
     @RolesAllowed({"ROLE_USER"})
     @PostMapping(value = "user/submitOrder/{id}")
     ResponseEntity<?> submitOrder(@PathVariable Long id) {
-        Order submitOrder = orderService.getOrderById(id);
-        if (submitOrder.getStatus() == OrderStatus.CREATED || submitOrder.getStatus() == OrderStatus.DECLINED) {
-            submitOrder.setStatus(OrderStatus.AWAITING_APPROVAL);
-            orderService.saveNewOrder(submitOrder);
-
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        orderService.submitOrder(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RolesAllowed({"ROLE_MANAGER"})
@@ -98,12 +91,10 @@ public class OrderController {
         declineOrder.setDecliningReason(declineReasonDto.getId());
     }
 
-//    @RolesAllowed({"ROLE_MANAGER"})
-//    @PutMapping(value = "manager/updateOrder/{id}")
-//    public String updateOrderFulfilled(@PathVariable Long id, @RequestBody OrderDto order) {
-//        order.setStatus(OrderStatus.FULFILLED);
-//        orderService.updateOrderById(order, id);
-//
-//        return "Order fulfilled";
-//    }
+    @RolesAllowed({"ROLE_MANAGER"})
+    @PutMapping(value = "manager/orderFulfilled/{id}")
+    public String updateOrderFulfilled(@PathVariable Long id) {
+        orderService.orderFulfilled(id);
+        return "Order fulfilled";
+    }
 }
