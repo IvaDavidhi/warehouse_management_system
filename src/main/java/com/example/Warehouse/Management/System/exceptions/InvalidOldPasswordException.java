@@ -1,13 +1,10 @@
 package com.example.Warehouse.Management.System.exceptions;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public final class InvalidOldPasswordException extends RuntimeException {
+    private String message;
 
-    public InvalidOldPasswordException() {
-        super();
+    public InvalidOldPasswordException(String message){
+        super(message);
     }
 
 }
