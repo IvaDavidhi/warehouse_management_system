@@ -12,18 +12,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 
 @RestController
+@PreAuthorize("hasAuthority('ADMIN')")
 @RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @RolesAllowed({"ROLE_ADMIN", "ROLE_MANAGER"})
     @GetMapping()
     public ResponseEntity<Page<User>> getUsers(Pageable pageable) {
         return ResponseEntity.ok().body(userService.listAllUsers(pageable));

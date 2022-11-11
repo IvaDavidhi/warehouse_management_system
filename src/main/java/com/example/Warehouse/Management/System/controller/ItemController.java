@@ -28,7 +28,7 @@ public class ItemController {
         return ResponseEntity.ok().body(itemService.listAllItems(pageable));
     }
 
-    @GetMapping(value = "find/{id}")
+    @GetMapping(value = "/find/{id}")
     ResponseEntity<InventoryItems> getItemById(@PathVariable Long id) {
         return new ResponseEntity<>(itemService.getItemById(id), HttpStatus.OK);
     }

@@ -53,7 +53,7 @@ public class OrderController {
     }
 
     @RolesAllowed({"ROLE_USER"})
-    @PutMapping(value = "user/updateOrder/{id}")
+    @PutMapping(value = "/user/updateOrder/{id}")
     public String updateOrder(@PathVariable Long id, @RequestBody UpdateOrderDto order) {
         orderService.updateOrderById(order, id);
 
@@ -61,14 +61,14 @@ public class OrderController {
     }
 
     @RolesAllowed({"ROLE_USER"})
-    @DeleteMapping(value = "user/delete/{id}")
+    @DeleteMapping(value = "/user/delete/{id}")
     ResponseEntity<?> deleteOrderById(@PathVariable Long id) {
         orderService.deleteOrderById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RolesAllowed({"ROLE_USER"})
-    @PostMapping(value = "user/submitOrder/{id}")
+    @PostMapping(value = "/user/submitOrder/{id}")
     ResponseEntity<?> submitOrder(@PathVariable Long id) {
         orderService.submitOrder(id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -84,7 +84,7 @@ public class OrderController {
     }
 
     @RolesAllowed({"ROLE_MANAGER"} )
-    @GetMapping(value = "/declineOrder")
+    @GetMapping(value = "/manager/declineOrder")
     public void declineOrder (@PathVariable Long id, @RequestParam DeclineReasonDto declineReasonDto){
         Order declineOrder = orderService.getOrderById(id);
         declineOrder.setStatus(OrderStatus.DECLINED);
@@ -92,7 +92,7 @@ public class OrderController {
     }
 
     @RolesAllowed({"ROLE_MANAGER"})
-    @PutMapping(value = "manager/orderFulfilled/{id}")
+    @PutMapping(value = "/manager/orderFulfilled/{id}")
     public String updateOrderFulfilled(@PathVariable Long id) {
         orderService.orderFulfilled(id);
         return "Order fulfilled";
