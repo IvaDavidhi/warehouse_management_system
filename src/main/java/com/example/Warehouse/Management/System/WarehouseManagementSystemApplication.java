@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @OpenAPIDefinition(info = @Info(title = "Warehouse Management API", version = "1.0", description = "Inventory Information"))
-@SecurityScheme(name = "warehouse", scheme = "basic", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
+//@SecurityScheme(name = "warehouse", scheme = "basic", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 public class WarehouseManagementSystemApplication {
 
 	public static void main(String[] args) {

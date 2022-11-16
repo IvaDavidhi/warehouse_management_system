@@ -21,7 +21,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/auth")
-@SecurityRequirement(name = "warehouse")
+//@SecurityRequirement(name = "warehouse")
 public class AuthController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
@@ -38,10 +38,11 @@ public class AuthController {
         return ResponseEntity.ok().body(authService.authenticateUser(loginRequest));
     }
 
-    @PostMapping("/signup")
-    public User registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
 
-        return  this.userService.saveNewUser(signUpRequest);
+    @PostMapping("/signup")
+    public ResponseEntity registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+
+        return  this.authService.registerUser(signUpRequest);
 
     }
 
